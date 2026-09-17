@@ -8,3 +8,4 @@ data/
 outputs/*.pt
 .idea/
 .vscode/
+report.pdf
