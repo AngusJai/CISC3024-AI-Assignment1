@@ -41,7 +41,7 @@ AdamW + cosine, batch 128, MPS; robust aug; EMNIST/SVHN 60k/10k subsample.
 
 **Clean-only (no rotation aug):** FasterNet Rot90 0.127 vs Equivariant Rot90 0.174 (TTA 0.659 vs 0.698)—equivariant helps a little, but aug remains essential.
 
-Multi-seed MNIST Rot90 **84.1%±10.0%**; EMNIST Rot90 **81.2%±3.2%**.
+Multi-seed MNIST Rot90 **84.1%±10.0%**; EMNIST Rot90 **81.2%±3.2%**. Clean ECE ≈ 0.0071.
 
 ## 5 What I Have Learnt
 

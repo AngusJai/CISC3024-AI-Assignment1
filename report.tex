@@ -101,7 +101,7 @@ Under my direction, the Cursor agent implemented the full pipeline with \textbf{
 I set goals, approved FasterNet, requested EMNIST/SVHN, multi-seed stats, GELU/equivariant/longer SVHN, and PDF polish; the agent wrote, ran and iterated the code.
 
 \section{Experiment Settings and Results}
-\textbf{Settings.} AdamW ($10^{-3}$), cosine schedule, batch 128, Apple MPS. Robust-aug includes cardinal/continuous rotations and noise/blur/shift/occlusion/elastic. EMNIST/SVHN use 60k/10k student-scale subsamples. Metrics: corruption accuracy, Rot90+TTA, reject@0.7, ECE, multi-seed mean$\pm$std; ablations on $n_{\mathrm{div}}$, GELU and equivariant baseline; SVHN 12 vs 24 epochs.
+\textbf{Settings.} AdamW ($10^{-3}$), cosine schedule, batch 128, Apple MPS; main MNIST/EMNIST runs use 12 epochs (SVHN ablation: 12 vs 24). Robust-aug includes cardinal/continuous rotations and noise/blur/shift/occlusion/elastic. EMNIST/SVHN use 60k/10k student-scale subsamples. Metrics: corruption accuracy, Rot90+TTA, reject@0.7, ECE, multi-seed mean$\pm$std; ablations on $n_{\mathrm{div}}$, GELU and equivariant baseline.
 
 \begin{table}[H]
 \centering
@@ -125,7 +125,7 @@ p4 Equivariant-aug & 0.964 & 0.912 & 0.823 & 0.927 & 0.831 \\
 \end{table}
 
 {\small
-Multi-seed MNIST Rot90: $84.1\%\pm 10.0\%$. EMNIST multi-seed Rot90: $81.2\%\pm 3.2\%$. Clean ECE $\approx 0.0076$; hardest Rot90 pair $6\leftrightarrow 9$. Full $n_{\mathrm{div}}\!\in\!\{2,4,8\}$ 12-epoch ablation (Table~\ref{tab:ndiv}) supports paper default $r{=}1/4$ for latency/clean trade-off.
+Multi-seed MNIST Rot90: $84.1\%\pm 10.0\%$. EMNIST multi-seed Rot90: $81.2\%\pm 3.2\%$. Clean ECE $\approx 0.0071$; hardest Rot90 pair $6\leftrightarrow 9$. Full $n_{\mathrm{div}}\!\in\!\{2,4,8\}$ 12-epoch ablation (Table~\ref{tab:ndiv}) supports paper default $r{=}1/4$ for latency/clean trade-off.
 }
 
 \begin{table}[H]
@@ -236,8 +236,6 @@ G.~Cohen et al.\ EMNIST: an extension of MNIST to handwritten letters.\ 2017.
 Y.~Netzer et al.\ Reading Digits in Natural Images with Unsupervised Feature Learning.\ NIPS Workshop, 2011.
 \bibitem{rath2023invariances}
 M.~Rath and A.~Condurache.\ Deep Neural Networks with Efficient Guaranteed Invariances.\ AISTATS, 2023.
-\bibitem{rath2022invariant}
-M.~Rath and A.~Condurache.\ Improving the Sample-Complexity of Deep Classification Networks with Invariant Integration.\ arXiv:2202.03967, 2022.
 \end{thebibliography}
 
 \end{document}

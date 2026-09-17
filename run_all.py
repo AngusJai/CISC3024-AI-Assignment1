@@ -24,12 +24,12 @@ def main():
     DATA.mkdir(exist_ok=True)
 
     jobs = [
-        # FasterNet clean + aug
-        ["train.py", "--model", "fasternet", "--epochs", "8"],
-        ["train.py", "--model", "fasternet", "--aug", "--epochs", "8"],
+        # FasterNet clean + aug (12 epochs matches report main runs)
+        ["train.py", "--model", "fasternet", "--epochs", "12"],
+        ["train.py", "--model", "fasternet", "--aug", "--epochs", "12"],
         # Baseline clean + aug
-        ["train.py", "--model", "baseline", "--epochs", "8"],
-        ["train.py", "--model", "baseline", "--aug", "--epochs", "8"],
+        ["train.py", "--model", "baseline", "--epochs", "12"],
+        ["train.py", "--model", "baseline", "--aug", "--epochs", "12"],
     ]
     for args in jobs:
         run([PY, *args, "--data-dir", str(DATA), "--out-dir", str(OUT)])
