@@ -158,6 +158,24 @@ $n_{\mathrm{div}}$ & Params & Clean & Rot45 & Rot90 & Noise & Lat.\ (ms/512) \\
 
 \begin{figure}[H]
 \centering
+\safeimg[0.88\linewidth]{fig_mnist_multicorr_0to9.png}
+\caption{MNIST digits 0--9 under multiple corruptions (noise, blur, shift, occlusion, elastic)---not only rotation.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeimg[0.95\linewidth]{fig_mnist_rot90_vs_tta_0to9.png}
+\caption{Single-pass Rot90 vs rotation TTA on digits 0--9; TTA recovers many orientation mistakes.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeimg[0.72\linewidth]{fasternet_aug_rotate_90_perclass_cm.png}
+\caption{MNIST confusion matrix at $90^\circ$ rotation; errors concentrate on confusable pairs such as $6\leftrightarrow 9$.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
 \safeimg[0.78\linewidth]{fig_ndiv_ablation.png}
 \caption{$n_{\mathrm{div}}$ accuracy--latency trade-off.}
 \end{figure}
