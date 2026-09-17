@@ -54,18 +54,18 @@ under Geometric and Noise Corruptions}
 \thispagestyle{fancy}
 
 \begin{abstract}
-This report follows the required AI-assignment structure: (1)~how AI was asked to find the algorithm, (2)~algorithm description, (3)~how AI implemented it, (4)~experiment settings and results, (5)~what was learnt, and (6)~the source-code webpage link. The selected Deep CNN is \textbf{FasterNet} (CVPR~2023) with Partial Convolution (PConv), applied to robust digit recognition (0--9) on MNIST, EMNIST Digits and SVHN under rotation/noise/blur/shift/occlusion/elastic corruptions. All search, coding, experiments and drafting were performed by a Cursor AI agent under human direction (no hand-written code).
+\textbf{Thesis:} a recent efficient Deep CNN (FasterNet with Partial Convolution) plus robust augmentation and rotation TTA recognizes digits under geometric/noise corruptions far better than clean-only training, and remains competitive with a student-scale equivariant baseline while staying easy for an AI agent to implement and verify.
+This report follows the required structure: (1)~how AI was asked to find the algorithm, (2)~algorithm description, (3)~how AI implemented it, (4)~experiment settings and results, (5)~what was learnt, and (6)~the source-code link. We evaluate MNIST, EMNIST Digits and SVHN. Search, coding, experiments and drafting were done by a Cursor AI agent under my direction (no hand-written code).
 \end{abstract}
 
 \section{How I Asked AI Tools to Find the Algorithm}
-I used the \textbf{Cursor} AI coding agent as the only AI tool for search, programming and report writing. I did \emph{not} hand-write code. Typical prompts / directions included:
+I used \textbf{Cursor} as the only AI tool for search, coding and writing; I did not hand-write code. Concretely, I first asked the agent to \emph{plan and ask clarifying questions} rather than jump into a week-long schedule, because the Moodle brief was short. I then locked constraints in plain language:
 \begin{itemize}
-  \item Find a \textbf{recent} Deep CNN or Deep Autoencoder (preferably 2023--2024) suitable for computer vision / pattern recognition; prefer peer-reviewed papers (CVPR/ICCV/NeurIPS).
-  \item Avoid duplicating a peer's \textbf{RepViT} + tiny $8{\times}8$ digit fusion narrative; choose a \emph{different} mechanism and a standard digit benchmark story.
-  \item Prefer an efficient CNN whose core operator can be verified (not only ``train and report accuracy'').
-  \item Frame the application as \textbf{robust digit pattern recognition} (rotated/noisy digits still recognized), not only clean upright MNIST.
+  \item Find a \textbf{recent} (2023--2024) Deep CNN/Autoencoder with a peer-reviewed paper; do not copy a peer's \textbf{RepViT} + $8{\times}8$ fusion story.
+  \item Prefer an operator we can \textbf{verify} (not accuracy-only), and frame the application as \textbf{robust digit recognition} (a rotated ``3'' should still be recognized).
+  \item After early demos looked ``only digit 3 / only $90^\circ$'', I told the agent to enrich multi-digit, multi-angle evidence and to extend to EMNIST/SVHN.
 \end{itemize}
-The agent web-searched recent lightweight CNNs and proposed candidates. We locked \textbf{FasterNet} (Chen et al., CVPR~2023, arXiv:2303.03667) because Partial Convolution (PConv) is a clear, recent Deep-CNN contribution distinct from structural re-parameterization (e.g., MobileOne/RepViT). Rejected alternatives included simply copying RepViT. A command-level diary is kept in \texttt{process\_log.md}.
+The agent proposed several lightweight CNNs; I chose \textbf{FasterNet} (Chen et al., CVPR~2023) for Partial Convolution (PConv), which is distinct from re-parameterization. Diary: \texttt{process\_log.md}.
 
 \section{Algorithm Description}
 \paragraph{FasterNet / PConv.}
@@ -112,9 +112,9 @@ I set goals, approved FasterNet, requested EMNIST/SVHN, multi-seed stats, GELU/e
 \toprule
 Setting & Clean & Rot45 & Rot90 & Rot90+TTA & Noise \\
 \midrule
-MNIST FasterNet-aug & 0.989 & 0.965 & 0.805 & 0.939 & 0.940 \\
+MNIST FasterNet-aug & 0.987 & 0.966 & 0.887 & 0.948 & 0.891 \\
 EMNIST FasterNet-aug & 0.988 & 0.968 & 0.835 & 0.941 & 0.801 \\
-MNIST clean-only & 0.992 & 0.548 & 0.130 & -- & 0.425 \\
+MNIST clean-only & 0.993 & 0.588 & 0.127 & 0.659 & 0.377 \\
 MNIST Baseline-aug & 0.958 & 0.735 & 0.267 & -- & 0.934 \\
 SVHN 12ep & 0.789 & 0.576 & 0.572 & 0.720 & 0.641 \\
 SVHN 24ep long & 0.858 & 0.711 & 0.671 & 0.792 & 0.693 \\
@@ -140,6 +140,21 @@ $n_{\mathrm{div}}$ & Params & Clean & Rot45 & Rot90 & Noise & Lat.\ (ms/512) \\
 2 & 342k & 0.988 & 0.967 & 0.834 & 0.935 & 14.5 \\
 4 & 271k & 0.987 & 0.966 & 0.887 & 0.885 & 12.1 \\
 8 & 253k & 0.977 & 0.965 & 0.930 & 0.838 & 15.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Clean-only training (no rotation aug): FasterNet vs p4 equivariant. Equivariant is slightly better at Rot90/TTA but both remain weak without augmentation---so aug+TTA stays essential.}
+\label{tab:clean_eq}
+\begin{tabular}{lcccc}
+\toprule
+Model (clean train) & Clean & Rot45 & Rot90 & Rot90+TTA \\
+\midrule
+FasterNet-clean & 0.993 & 0.588 & 0.127 & 0.659 \\
+p4 Equivariant-clean & 0.989 & 0.436 & 0.174 & 0.698 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -190,21 +205,21 @@ $n_{\mathrm{div}}$ & Params & Clean & Rot45 & Rot90 & Noise & Lat.\ (ms/512) \\
 
 \section{What I Have Learnt from This AI Assignment}
 \begin{itemize}
-  \item \textbf{Directing AI is the skill:} clear constraints (recent Deep CNN, no peer-copy, robust digits, verify PConv) matter more than writing every line myself.
-  \item \textbf{Clean accuracy is not enough} for pattern recognition under nuisance transforms; clean-only Rot90 collapses to $\sim$13\% while robust aug + TTA recovers to $\sim$80--94\%.
-  \item \textbf{Mechanism checks} (PConv identity/FLOPs, $n_{\mathrm{div}}$ ablation, multi-seed mean$\pm$std) make an AI-generated project academically credible.
-  \item \textbf{Literature alternatives} (equivariant CNNs) are useful baselines; for this budget, FasterNet + aug + TTA remained the better primary story.
-  \item \textbf{Domain shift:} EMNIST writer variation and SVHN scene digits expose limits that upright MNIST hides; longer SVHN training (12$\rightarrow$24 epochs) recovered large gains.
-  \item \textbf{Process documentation} (\texttt{process\_log.md}) is required and also helps debugging AI iterations.
+  \item \textbf{Prompting is the real coursework:} when I only said ``train a CNN,'' results looked like toy upright MNIST. When I insisted on PConv checks, multi-seed bars, EMNIST/SVHN and ``not only digit 3,'' the project became a pattern-recognition study.
+  \item \textbf{Clean accuracy lies:} clean-only FasterNet is $\sim$99\% upright but $\sim$13\% at Rot90; robust aug + TTA recovers $\sim$80--94\%. That gap is the lesson, not the headline clean score.
+  \item \textbf{Architecture vs augmentation:} training a p4 equivariant CNN \emph{without} rotation aug tests whether invariance can come from the model itself (Table~\ref{tab:clean_eq}). FasterNet still needs aug for strong Rot90, so I keep FasterNet+aug+TTA as the main story and equivariance as a calibrated baseline.
+  \item \textbf{Mechanism + variance matter:} PConv identity/FLOPs, $n_{\mathrm{div}}$ ablation and mean$\pm$std stop an AI report from looking like a single lucky run.
+  \item \textbf{Domains matter:} EMNIST writer style and SVHN house numbers punish ``MNIST-only'' narratives; longer SVHN training fixed a large under-training gap.
+  \item \textbf{Process logs help:} \texttt{process\_log.md} is required and also made debugging AI iterations easier.
 \end{itemize}
 
 \section{Source Code Webpage Link}
-Source code for this assignment (AI-generated implementation, scripts, report sources):\\[0.4em]
+Source code:\\[0.3em]
 \url{https://github.com/AngusJai/CISC3024-AI-Assignment1}\\[0.3em]
-{\small Repository includes \texttt{models/}, training/evaluation scripts, \texttt{process\_log.md}, and \texttt{report.tex}. Large datasets under \texttt{data/} and local \texttt{.venv/} are excluded via \texttt{.gitignore}; download MNIST/EMNIST/SVHN with the provided scripts.}
+{\small Includes \texttt{models/}, training/evaluation scripts, \texttt{scripts/}, \texttt{process\_log.md}, and \texttt{report.tex}. Datasets (\texttt{data/}) and \texttt{.venv/} are gitignored. A trained MNIST FasterNet-aug checkpoint is attached as a GitHub Release asset for demo convenience.}
 
 \section{Conclusion}
-Using Cursor end-to-end, I searched for a recent Deep CNN (FasterNet), described and verified PConv, had AI implement the full robust-digit pipeline, reported experiments on MNIST/EMNIST/SVHN with ablations, reflected on learning outcomes, and published the source code link above.
+FasterNet with Partial Convolution, directed end-to-end through Cursor, is a credible recent Deep CNN for robust digit pattern recognition: verified PConv behaviour, strong multi-condition results on MNIST/EMNIST/SVHN versus clean-only collapse, ablations (including clean equivariant vs clean FasterNet), and a public source link. The assignment taught me that supervising AI---constraints, verification and honest limits---is as important as the model itself.
 
 \begin{thebibliography}{9}
 \bibitem{chen2023fasternet}

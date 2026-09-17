@@ -1,0 +1,23 @@
+{
+  "fasternet_aug": {
+    "clean": 0.9868,
+    "rotate_45": 0.9663,
+    "rotate_90": 0.8865,
+    "rotate_90_tta": 0.9482,
+    "gaussian_noise": 0.8914
+  },
+  "fasternet_clean": {
+    "clean": 0.9932,
+    "rotate_45": 0.5877,
+    "rotate_90": 0.1266,
+    "rotate_90_tta": 0.6585,
+    "gaussian_noise": 0.3774
+  },
+  "equivariant_clean": {
+    "clean": 0.9894,
+    "rotate_45": 0.4358,
+    "rotate_90": 0.1741,
+    "rotate_90_tta": 0.6981,
+    "gaussian_noise": 0.1304
+  }
+}

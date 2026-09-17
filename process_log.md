@@ -17,11 +17,13 @@ I started by asking the agent to **plan professionally and ask clarifying questi
 
 - Selected **FasterNet** (CVPR 2023, PConv); avoided peer RepViT narrative.
 - Built core pipeline: `models/`, `corruptions.py`, `train.py`, `evaluate.py`, `run_all.py`.
-- MNIST FasterNet-aug: Clean 98.9%, Rot90 80.5%, Rot90+TTA 93.9%.
+- MNIST FasterNet-aug (retrained): Clean 98.7%, Rot90 88.7%, Rot90+TTA 94.8%.
+- Clean-only vs equivariant: FasterNet-clean Rot90 12.7% / TTA 65.9%; p4 Equivariant-clean Rot90 17.4% / TTA 69.8% — equivariance helps slightly, aug still essential.
 - Analysis/figures via `scripts/pconv_efficiency.py`, `scripts/analyze_extra.py`, `scripts/make_rich_figures.py`.
 - EMNIST + SVHN; multi-seed; `n_div` ablation; GELU; p4 equivariant; SVHN 24-epoch long run.
 - Report: `report.tex` → `AIAssignment1_Report.pdf` (required 6 sections).
 - Repo cleanup: obsolete tools removed; helpers under `scripts/`; `outputs/` keeps report assets only.
+- Checkpoint `fasternet_aug.pt` attached as GitHub Release asset.
 
 ## Key commands
 
