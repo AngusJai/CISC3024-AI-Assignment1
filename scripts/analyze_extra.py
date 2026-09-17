@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -204,9 +208,9 @@ def save_gradcam_gallery(model, dataset, device, out_path: Path, n=8):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--ckpt", type=Path, default=Path("outputs/fasternet_aug.pt"))
-    p.add_argument("--data-dir", type=Path, default=Path("data"))
-    p.add_argument("--out-dir", type=Path, default=Path("outputs"))
+    p.add_argument("--ckpt", type=Path, default=ROOT / "outputs/fasternet_aug.pt")
+    p.add_argument("--data-dir", type=Path, default=ROOT / "data")
+    p.add_argument("--out-dir", type=Path, default=ROOT / "outputs")
     args = p.parse_args()
 
     device = get_device()

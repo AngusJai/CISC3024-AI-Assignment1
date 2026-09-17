@@ -3,7 +3,12 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import matplotlib.pyplot as plt
 import torch
@@ -14,7 +19,7 @@ from analyze_extra import grad_cam_maps
 from corruptions import CORRUPTION_FN, rotate_batch
 from evaluate import get_device, load_model, predict_with_rotation_tta
 
-OUT = Path("outputs")
+OUT = ROOT / "outputs"
 
 
 def pick_one_per_digit(dataset):

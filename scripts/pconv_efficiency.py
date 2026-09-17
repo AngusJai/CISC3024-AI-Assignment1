@@ -8,8 +8,12 @@ Also checks that PConv leaves untouched channels unchanged (exact identity).
 from __future__ import annotations
 
 import json
+import sys
 import time
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 import torch
 import torch.nn as nn
@@ -38,7 +42,7 @@ def bench(module: nn.Module, x: torch.Tensor, reps: int = 200) -> float:
 
 
 def main():
-    out_dir = Path("outputs")
+    out_dir = ROOT / "outputs"
     out_dir.mkdir(exist_ok=True)
     device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
     dim, h, w, n_div = 128, 14, 14, 4

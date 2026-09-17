@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 import gradio as gr
 import numpy as np
@@ -13,15 +17,25 @@ from PIL import Image
 from corruptions import CORRUPTION_FN
 from evaluate import get_device, load_model
 
-CKPT = Path("outputs/fasternet_aug.pt")
+CKPT = ROOT / "outputs" / "fasternet_aug.pt"
 DEVICE = get_device()
-MODEL, _ = load_model(CKPT, DEVICE)
+MODEL = None
+
+
+def _ensure_model():
+    global MODEL
+    if MODEL is None:
+        if not CKPT.exists():
+            raise FileNotFoundError(
+                f"Missing checkpoint {CKPT}. Train first: python train.py --model fasternet --aug"
+            )
+        MODEL, _ = load_model(CKPT, DEVICE)
+    return MODEL
 
 
 def _to_tensor(img: Image.Image) -> torch.Tensor:
     img = img.convert("L").resize((28, 28))
     arr = np.asarray(img).astype(np.float32) / 255.0
-    # MNIST digits are white-on-black; invert if canvas is black-on-white
     if arr.mean() > 0.5:
         arr = 1.0 - arr
     return torch.from_numpy(arr)[None, None, ...].to(DEVICE)
@@ -31,14 +45,15 @@ def _to_tensor(img: Image.Image) -> torch.Tensor:
 def predict(image, corruption: str, reject_threshold: float, use_tta: bool):
     if image is None:
         return "Please draw or upload a digit.", None
+    model = _ensure_model()
     x = _to_tensor(image)
     x = CORRUPTION_FN[corruption](x)
     if use_tta:
         from evaluate import predict_with_rotation_tta
 
-        probs = predict_with_rotation_tta(MODEL, x)[0]
+        probs = predict_with_rotation_tta(model, x)[0]
     else:
-        probs = F.softmax(MODEL(x), dim=1)[0]
+        probs = F.softmax(model(x), dim=1)[0]
     conf, pred = probs.max(0)
     conf = float(conf)
     pred = int(pred)

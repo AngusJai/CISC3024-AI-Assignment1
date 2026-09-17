@@ -94,9 +94,9 @@ Under my direction, the Cursor agent implemented the full pipeline with \textbf{
   \item \texttt{models/equivariant\_cnn.py} --- p4 orbit-CNN baseline; \texttt{models/baseline\_cnn.py} --- SimpleCNN control.
   \item \texttt{corruptions.py} --- train-time robust aug + test corruptions (rotate/noise/blur/shift/occlusion/elastic).
   \item \texttt{train.py} / \texttt{evaluate.py} --- MNIST/EMNIST/SVHN loaders, MPS training, Rot90 TTA, reject curves, figures JSON.
-  \item Analysis: \texttt{pconv\_efficiency.py}, \texttt{analyze\_extra.py}, \texttt{make\_rich\_figures.py}.
-  \item Drivers: \texttt{run\_all.py}, \texttt{run\_upgrade\_15.py}, \texttt{run\_upgrade\_gelu\_eq\_svhn.py}.
-  \item Report/demo: \texttt{report.tex}, \texttt{app\_gradio.py}, \texttt{process\_log.md}.
+  \item Analysis: \texttt{scripts/pconv\_efficiency.py}, \texttt{scripts/analyze\_extra.py}, \texttt{scripts/make\_rich\_figures.py}.
+  \item Drivers: \texttt{run\_all.py}, \texttt{scripts/run\_upgrade\_15.py}, \texttt{scripts/run\_upgrade\_gelu\_eq\_svhn.py}.
+  \item Report/demo: \texttt{report.tex}, \texttt{scripts/app\_gradio.py}, \texttt{process\_log.md}.
 \end{itemize}
 I set goals, approved FasterNet, requested EMNIST/SVHN, multi-seed stats, GELU/equivariant/longer SVHN, and PDF polish; the agent wrote, ran and iterated the code.
 
