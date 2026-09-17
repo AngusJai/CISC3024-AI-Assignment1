@@ -42,16 +42,16 @@ When the plan felt slow, I told the agent to **skip the one-week calendar and im
 ### PDF polish (1–8)
 - Architecture diagram `fig_architecture.png`
 - `n_div` ablation `{2,4,8}` → `ndiv_ablation.json` / `fig_ndiv_ablation.png`
-- Rewrote `build_report_pdf.py` for dense academic layout (abstract, tables, figure interpretations, prose)
+- Rewrote dense academic PDF via `report.tex` (LaTeX/Tectonic → `AIAssignment1_Report.pdf`)
 - Synced `AIAssignment1_Report.md` to match PDF
 
 ### Upgrade items 1–5 (web-informed)
-1. **LaTeX professional PDF:** `report.tex` + Tectonic → `AIAssignment1_Report.pdf` / `report.pdf`
+1. **LaTeX professional PDF:** `report.tex` + Tectonic → `AIAssignment1_Report.pdf`
 2. **SVHN:** trained FasterNet-aug RGB mini (60k/10k); Clean 0.789, Rot90 0.572, Rot90+TTA 0.720, Noise 0.641
 3. **Formal Related Work:** efficient CNNs (FasterNet/MobileOne), corruption/equivariance literature, MNIST/EMNIST/SVHN
 4. **Stronger stats:** EMNIST 3-seed mean±std (Rot90 0.812±0.032); keep MNIST multi-seed 84.1%±10.0%
 5. **Full `n_div` ablation:** 12-epoch robust-aug MNIST for `{2,4,8}` → `outputs/upgrade15_summary.json`; `n_div=4` best latency/clean trade-off
-- Driver script: `run_upgrade_15.py`; compile helper: `compile_latex_report.py`
+- Driver script: `run_upgrade_15.py`
 
 ### Upgrade: GELU + equivariant + SVHN-long
 - FasterNet `--act gelu` → Rot90 **0.866** (vs ReLU 0.805); clean 0.988
@@ -66,8 +66,8 @@ When the plan felt slow, I told the agent to **skip the one-week calendar and im
 ```bash
 python run_upgrade_15.py
 python run_upgrade_gelu_eq_svhn.py
-./.tectonic -X compile report.tex --outdir .
-python app_gradio.py
+# compile PDF (needs tectonic): ./.tectonic -X compile report.tex --outdir . && cp report.pdf AIAssignment1_Report.pdf
+python app_gradio.py   # needs a checkpoint from train.py first
 ```
 
 ## Submission checklist
@@ -75,7 +75,7 @@ python app_gradio.py
 - [x] Recent Deep CNN (FasterNet CVPR 2023)
 - [x] CV/PR application (robust digits, MNIST+EMNIST+SVHN)
 - [x] AI-only coding/search/experiments
-- [x] English LaTeX report PDF with Related Work + process documentation
-- [x] GELU / equivariant baseline / longer SVHN
-- [x] Name / Student ID filled
-- [ ] Upload `AIAssignment1_Report.pdf` (+ optional code) to UMMoodle
+- [x] English LaTeX report PDF with required 6 sections + process documentation
+- [x] Name: CHE CHI HIN, Angus / Student ID: UC325182
+- [x] Source code link: https://github.com/AngusJai/CISC3024-AI-Assignment1
+- [ ] Upload `AIAssignment1_Report.pdf` (+ GitHub link) to UMMoodle
