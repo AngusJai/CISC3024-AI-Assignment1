@@ -1,0 +1,61 @@
+{
+  "operator_bench": [
+    {
+      "n_div": 2,
+      "channels_convolved": 64,
+      "params": 36864,
+      "flops_batch64": 462422016,
+      "latency_ms": 0.41406028011503315,
+      "untouched_identity_err": 0.0
+    },
+    {
+      "n_div": 4,
+      "channels_convolved": 32,
+      "params": 9216,
+      "flops_batch64": 115605504,
+      "latency_ms": 0.2523608334983388,
+      "untouched_identity_err": 0.0
+    },
+    {
+      "n_div": 8,
+      "channels_convolved": 16,
+      "params": 2304,
+      "flops_batch64": 28901376,
+      "latency_ms": 0.20875416657266518,
+      "untouched_identity_err": 0.0
+    }
+  ],
+  "accuracy_ablation_5ep_20k": [
+    {
+      "n_div": 2,
+      "params": 342026,
+      "clean": 0.92,
+      "rotate_45": 0.86,
+      "rotate_90": 0.823,
+      "pconv_latency_ms": 0.41406028011503315,
+      "pconv_flops_batch64": 462422016,
+      "identity_err": 0.0
+    },
+    {
+      "n_div": 4,
+      "params": 271178,
+      "clean": 0.9306,
+      "rotate_45": 0.9036,
+      "rotate_90": 0.8068,
+      "pconv_latency_ms": 0.2523608334983388,
+      "pconv_flops_batch64": 115605504,
+      "identity_err": 0.0
+    },
+    {
+      "n_div": 8,
+      "params": 253466,
+      "clean": 0.8922,
+      "rotate_45": 0.8742,
+      "rotate_90": 0.831,
+      "pconv_latency_ms": 0.20875416657266518,
+      "pconv_flops_batch64": 28901376,
+      "identity_err": 0.0
+    }
+  ],
+  "note": "Accuracy ablation uses 20k train / 5k test / 5 epochs for controlled comparison of n_div only."
+}

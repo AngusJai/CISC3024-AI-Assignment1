@@ -1,0 +1,58 @@
+{
+  "multiseed_fasternet_aug_mini": {
+    "clean": {
+      "mean": 0.9855,
+      "std": 0.0011269427669584684,
+      "values": [
+        0.9868,
+        0.9849,
+        0.9848
+      ]
+    },
+    "rotate_45": {
+      "mean": 0.9637666666666668,
+      "std": 0.009847503913852154,
+      "values": [
+        0.9663,
+        0.9529,
+        0.9721
+      ]
+    },
+    "rotate_90": {
+      "mean": 0.8413666666666666,
+      "std": 0.09995880818283767,
+      "values": [
+        0.8865,
+        0.7268,
+        0.9108
+      ]
+    },
+    "gaussian_noise": {
+      "mean": 0.9184333333333333,
+      "std": 0.029282304098778373,
+      "values": [
+        0.8847,
+        0.9333,
+        0.9373
+      ]
+    },
+    "final_test_acc": {
+      "mean": 0.9855,
+      "std": 0.0011269427669584684,
+      "values": [
+        0.9868,
+        0.9849,
+        0.9848
+      ]
+    }
+  },
+  "t0lite": {
+    "params": 657390,
+    "clean": 0.9842,
+    "rotate_45": 0.9746,
+    "rotate_90": 0.8923,
+    "gaussian_noise": 0.7091,
+    "latency_ms": 23.667855840176344
+  },
+  "emnist_status": "download stalled at ~46% of 562MB; deferred (code path ready: --dataset emnist)"
+}

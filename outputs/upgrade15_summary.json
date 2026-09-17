@@ -1,0 +1,130 @@
+{
+  "ndiv_full12ep": [
+    {
+      "n_div": 2,
+      "params": 342026,
+      "clean": 0.9879,
+      "rotate_45": 0.9666,
+      "rotate_90": 0.834,
+      "gaussian_noise": 0.9354,
+      "final_test_acc": 0.9879,
+      "tag": "fasternet_aug_ndiv2_full"
+    },
+    {
+      "n_div": 4,
+      "params": 271178,
+      "clean": 0.9868,
+      "rotate_45": 0.9663,
+      "rotate_90": 0.8865,
+      "gaussian_noise": 0.8847,
+      "final_test_acc": 0.9868,
+      "tag": "fasternet_aug_full"
+    },
+    {
+      "n_div": 8,
+      "params": 253466,
+      "clean": 0.9767,
+      "rotate_45": 0.9653,
+      "rotate_90": 0.9304,
+      "gaussian_noise": 0.8381,
+      "final_test_acc": 0.9767,
+      "tag": "fasternet_aug_ndiv8_full"
+    }
+  ],
+  "emnist_multiseed": {
+    "clean": {
+      "mean": 0.9808333333333333,
+      "std": 0.006906036007242763,
+      "values": [
+        0.9855,
+        0.9841,
+        0.9729
+      ]
+    },
+    "rotate_45": {
+      "mean": 0.9607,
+      "std": 0.0073328030111274745,
+      "values": [
+        0.9663,
+        0.9634,
+        0.9524
+      ]
+    },
+    "rotate_90": {
+      "mean": 0.8117333333333333,
+      "std": 0.03240252047809448,
+      "values": [
+        0.8439,
+        0.8122,
+        0.7791
+      ]
+    },
+    "gaussian_noise": {
+      "mean": 0.8170333333333334,
+      "std": 0.15852016696096852,
+      "values": [
+        0.8543,
+        0.9536,
+        0.6432
+      ]
+    }
+  },
+  "svhn": {
+    "clean": {
+      "accuracy": 0.7889,
+      "n": 10000
+    },
+    "rotate_30": {
+      "accuracy": 0.6155,
+      "n": 10000
+    },
+    "rotate_45": {
+      "accuracy": 0.5757,
+      "n": 10000
+    },
+    "rotate_90": {
+      "accuracy": 0.5722,
+      "n": 10000
+    },
+    "rotate_m45": {
+      "accuracy": 0.595,
+      "n": 10000
+    },
+    "gaussian_noise": {
+      "accuracy": 0.641,
+      "n": 10000
+    },
+    "salt_pepper": {
+      "accuracy": 0.7589,
+      "n": 10000
+    },
+    "blur": {
+      "accuracy": 0.7671,
+      "n": 10000
+    },
+    "shift": {
+      "accuracy": 0.6998,
+      "n": 10000
+    },
+    "occlusion": {
+      "accuracy": 0.6714,
+      "n": 10000
+    },
+    "elastic": {
+      "accuracy": 0.5974,
+      "n": 10000
+    },
+    "rotate_90_tta": {
+      "accuracy": 0.7204,
+      "n": 10000
+    },
+    "clean_tta": {
+      "accuracy": 0.7204,
+      "n": 10000
+    }
+  },
+  "literature_note": {
+    "fasternet_default_r": "1/4 (n_div=4) best accuracy/throughput on ImageNet (Chen et al. CVPR 2023)",
+    "robustness_approaches": "augmentation+TTA (this work) vs group-equivariant/invariant-integration CNNs (Rath et al.; Rot-MNIST/SVHN literature)"
+  }
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "tag": "fasternet_clean",
+    "clean": 0.9919,
+    "rotate_90": 0.1297,
+    "rotate_90_tta": null,
+    "reject": {
+      "threshold": 0.7,
+      "coverage": 0.9950000047683716,
+      "accuracy_on_accepted": 0.9947738647460938,
+      "num_rejected": 50
+    }
+  },
+  {
+    "tag": "fasternet_aug",
+    "clean": 0.9894,
+    "rotate_90": 0.8049,
+    "rotate_90_tta": 0.939,
+    "reject": {
+      "threshold": 0.7,
+      "coverage": 0.9843000173568726,
+      "accuracy_on_accepted": 0.9943106770515442,
+      "num_rejected": 157
+    }
+  },
+  {
+    "tag": "baseline_clean",
+    "clean": 0.9731,
+    "rotate_90": 0.1361,
+    "rotate_90_tta": null,
+    "reject": {
+      "threshold": 0.7,
+      "coverage": 0.9609000086784363,
+      "accuracy_on_accepted": 0.9879279732704163,
+      "num_rejected": 391
+    }
+  },
+  {
+    "tag": "baseline_aug",
+    "clean": 0.9575,
+    "rotate_90": 0.2669,
+    "rotate_90_tta": null,
+    "reject": {
+      "threshold": 0.7,
+      "coverage": 0.9326000213623047,
+      "accuracy_on_accepted": 0.9844520688056946,
+      "num_rejected": 674
+    }
+  }
+]

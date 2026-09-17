@@ -1,0 +1,34 @@
+{
+  "setting": {
+    "B": 64,
+    "C": 128,
+    "H": 14,
+    "W": 14,
+    "n_div": 4,
+    "device": "mps"
+  },
+  "pconv_untouched_channel_max_abs_err": 0.0,
+  "operators": [
+    {
+      "op": "PConv (n_div=4)",
+      "params": 9216,
+      "flops_per_batch64": 115605504,
+      "latency_ms": 0.3180862500448711,
+      "relative_flops_vs_dense": 0.0625
+    },
+    {
+      "op": "Depthwise 3x3",
+      "params": 1152,
+      "flops_per_batch64": 14450688,
+      "latency_ms": 0.07076499983668327,
+      "relative_flops_vs_dense": 0.0078125
+    },
+    {
+      "op": "Dense 3x3",
+      "params": 147456,
+      "flops_per_batch64": 1849688064,
+      "latency_ms": 0.8511620800709352,
+      "relative_flops_vs_dense": 1.0
+    }
+  ]
+}

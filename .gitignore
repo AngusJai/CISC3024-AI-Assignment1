@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+data/
+.DS_Store
+.tectonic
+*.pt
+outputs/*.pt
+.idea/
+.vscode/

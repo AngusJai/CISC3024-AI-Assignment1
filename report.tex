@@ -1,0 +1,210 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue,
+  pdfborder={0 0 0}
+}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{setspace}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\setstretch{1.12}
+\graphicspath{{outputs/}}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.25em,topsep=0.35em}
+
+\captionsetup{font=small,labelfont=bf,skip=4pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.1ex plus 0.3ex}{0.6ex}
+\titleformat{\paragraph}[runin]{\bfseries}{}{0pt}{}[.~]
+\titlespacing*{\paragraph}{0pt}{0.8ex}{0.5em}
+
+\newcommand{\safeimg}[2][0.88\linewidth]{%
+  \includegraphics[width=#1,height=0.40\textheight,keepaspectratio]{#2}%
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize CISC3024 AI Assignment \#1}
+\fancyhead[R]{\footnotesize CHE CHI HIN, Angus (UC325182)}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\title{\textbf{AI Assignment \#1}\\[0.25em]
+\large FasterNet for Robust Digit Pattern Recognition\\
+under Geometric and Noise Corruptions}
+\author{CHE CHI HIN, Angus\\Student ID: UC325182\\CISC3024 Pattern Recognition}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\begin{abstract}
+This report follows the required AI-assignment structure: (1)~how AI was asked to find the algorithm, (2)~algorithm description, (3)~how AI implemented it, (4)~experiment settings and results, (5)~what was learnt, and (6)~the source-code webpage link. The selected Deep CNN is \textbf{FasterNet} (CVPR~2023) with Partial Convolution (PConv), applied to robust digit recognition (0--9) on MNIST, EMNIST Digits and SVHN under rotation/noise/blur/shift/occlusion/elastic corruptions. All search, coding, experiments and drafting were performed by a Cursor AI agent under human direction (no hand-written code).
+\end{abstract}
+
+\section{How I Asked AI Tools to Find the Algorithm}
+I used the \textbf{Cursor} AI coding agent as the only AI tool for search, programming and report writing. I did \emph{not} hand-write code. Typical prompts / directions included:
+\begin{itemize}
+  \item Find a \textbf{recent} Deep CNN or Deep Autoencoder (preferably2023--2024) suitable for computer vision / pattern recognition; prefer peer-reviewed papers (CVPR/ICCV/NeurIPS).
+  \item Avoid duplicating a peer's \textbf{RepViT} + tiny $8{\times}8$ digit fusion narrative; choose a \emph{different} mechanism and a standard digit benchmark story.
+  \item Prefer an efficient CNN whose core operator can be verified (not only ``train and report accuracy'').
+  \item Frame the application as \textbf{robust digit pattern recognition} (rotated/noisy digits still recognized), not only clean upright MNIST.
+\end{itemize}
+The agent web-searched recent lightweight CNNs and proposed candidates. We locked \textbf{FasterNet} (Chen et al., CVPR~2023, arXiv:2303.03667) because Partial Convolution (PConv) is a clear, recent Deep-CNN contribution distinct from structural re-parameterization (e.g., MobileOne/RepViT). Rejected alternatives included simply copying RepViT. A command-level diary is kept in \texttt{process\_log.md}.
+
+\section{Algorithm Description}
+\paragraph{FasterNet / PConv.}
+FasterNet argues that reducing FLOPs alone (e.g., depthwise convolution) may not maximize latency because of memory access cost~\cite{chen2023fasternet}. \textbf{Partial Convolution} applies a spatial $3{\times}3$ convolution to only a fraction $r{=}1/n_{\mathrm{div}}$ of channels (paper default $r{=}1/4$) and leaves the remaining channels untouched; a residual pointwise MLP then mixes channels.
+
+\paragraph{Our adaptation (FasterNet-mini).}
+For $28{\times}28$ greyscale (MNIST/EMNIST) and $32{\times}32$ RGB (SVHN) we use a $2{\times}2$ patch stem and three stages (embed 32, depths $(1,2,2)$). Each block is $\mathrm{PConv}(n_{\mathrm{div}})\!\rightarrow\!$ BN+activation pointwise MLP. Main runs use ReLU; we ablate GELU. We also implement a student-scale \textbf{p4 orbit-convolution} baseline for literature comparison (augmentation vs architectural invariance)~\cite{rath2023invariances}.
+
+\begin{figure}[H]
+\centering
+\safeimg[0.88\linewidth]{fig_architecture.png}
+\caption{FasterNet-mini architecture used for MNIST/EMNIST.}
+\label{fig:arch}
+\end{figure}
+
+\paragraph{PConv verification.}
+Untouched channels remain exact identities (max abs error $=0$). At $n_{\mathrm{div}}{=}4$, PConv uses $6.25\%$ of dense $3{\times}3$ FLOPs on a fixed activation shape.
+
+\paragraph{Related context.}
+MobileOne~\cite{vasu2023mobileone} targets mobile latency via re-parameterization (different mechanism). Corruption-style evaluation follows Hendrycks \& Dietterich~\cite{hendrycks2019benchmarking}. Digit domains: MNIST~\cite{lecun1998gradient}, EMNIST Digits~\cite{cohen2017emnist}, SVHN~\cite{netzer2011reading}.
+
+\section{How AI Implemented the Algorithm}
+Under my direction, the Cursor agent implemented the full pipeline with \textbf{no hand-written student code}:
+\begin{itemize}
+  \item \texttt{models/fasternet\_mini.py} --- PConv, MLPBlock, FasterNet-mini / T0-lite, GELU option.
+  \item \texttt{models/equivariant\_cnn.py} --- p4 orbit-CNN baseline; \texttt{models/baseline\_cnn.py} --- SimpleCNN control.
+  \item \texttt{corruptions.py} --- train-time robust aug + test corruptions (rotate/noise/blur/shift/occlusion/elastic).
+  \item \texttt{train.py} / \texttt{evaluate.py} --- MNIST/EMNIST/SVHN loaders, MPS training, Rot90 TTA, reject curves, figures JSON.
+  \item Analysis: \texttt{pconv\_efficiency.py}, \texttt{analyze\_extra.py}, \texttt{make\_rich\_figures.py}.
+  \item Drivers: \texttt{run\_all.py}, \texttt{run\_upgrade\_15.py}, \texttt{run\_upgrade\_gelu\_eq\_svhn.py}.
+  \item Report/demo: \texttt{report.tex}, \texttt{app\_gradio.py}, \texttt{process\_log.md}.
+\end{itemize}
+I set goals, approved FasterNet, requested EMNIST/SVHN, multi-seed stats, GELU/equivariant/longer SVHN, and PDF polish; the agent wrote, ran and iterated the code.
+
+\section{Experiment Settings and Results}
+\textbf{Settings.} AdamW ($10^{-3}$), cosine schedule, batch 128, Apple MPS. Robust-aug includes cardinal/continuous rotations and noise/blur/shift/occlusion/elastic. EMNIST/SVHN use 60k/10k student-scale subsamples. Metrics: corruption accuracy, Rot90+TTA, reject@0.7, ECE, multi-seed mean$\pm$std; ablations on $n_{\mathrm{div}}$, GELU and equivariant baseline; SVHN 12 vs 24 epochs.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Main robustness results.}
+\label{tab:main}
+\begin{tabular}{lccccc}
+\toprule
+Setting & Clean & Rot45 & Rot90 & Rot90+TTA & Noise \\
+\midrule
+MNIST FasterNet-aug & 0.989 & 0.965 & 0.805 & 0.939 & 0.940 \\
+EMNIST FasterNet-aug & 0.988 & 0.968 & 0.835 & 0.941 & 0.801 \\
+MNIST clean-only & 0.992 & 0.548 & 0.130 & -- & 0.425 \\
+MNIST Baseline-aug & 0.958 & 0.735 & 0.267 & -- & 0.934 \\
+SVHN 12ep & 0.789 & 0.576 & 0.572 & 0.720 & 0.641 \\
+SVHN 24ep long & 0.858 & 0.711 & 0.671 & 0.792 & 0.693 \\
+GELU (MNIST) & 0.988 & 0.973 & 0.866 & 0.935 & 0.857 \\
+p4 Equivariant-aug & 0.964 & 0.912 & 0.823 & 0.927 & 0.831 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+{\small
+Multi-seed MNIST Rot90: $84.1\%\pm 10.0\%$. EMNIST multi-seed Rot90: $81.2\%\pm 3.2\%$. Clean ECE $\approx 0.0076$; hardest Rot90 pair $6\leftrightarrow 9$. Full $n_{\mathrm{div}}\!\in\!\{2,4,8\}$ 12-epoch ablation (Table~\ref{tab:ndiv}) supports paper default $r{=}1/4$ for latency/clean trade-off.
+}
+
+\begin{table}[H]
+\centering
+\small
+\caption{$n_{\mathrm{div}}$ ablation (12-epoch robust-aug MNIST).}
+\label{tab:ndiv}
+\begin{tabular}{ccccccc}
+\toprule
+$n_{\mathrm{div}}$ & Params & Clean & Rot45 & Rot90 & Noise & Lat.\ (ms/512) \\
+\midrule
+2 & 342k & 0.988 & 0.967 & 0.834 & 0.935 & 14.5 \\
+4 & 271k & 0.987 & 0.966 & 0.887 & 0.885 & 12.1 \\
+8 & 253k & 0.977 & 0.965 & 0.930 & 0.838 & 15.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\safeimg[0.82\linewidth]{fig_mnist_vs_emnist_bars.png}
+\caption{MNIST vs EMNIST Digits robustness.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeimg[0.90\linewidth]{fig_mnist_multangle_0to9.png}
+\caption{MNIST digits 0--9 under multiple rotation angles.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeimg[0.78\linewidth]{fig_ndiv_ablation.png}
+\caption{$n_{\mathrm{div}}$ accuracy--latency trade-off.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\safeimg[0.82\linewidth]{fasternet_aug_svhn_long_corruption_bars.png}
+\caption{SVHN corruption bars after 24-epoch training.}
+\end{figure}
+
+\FloatBarrier
+
+\section{What I Have Learnt from This AI Assignment}
+\begin{itemize}
+  \item \textbf{Directing AI is the skill:} clear constraints (recent Deep CNN, no peer-copy, robust digits, verify PConv) matter more than writing every line myself.
+  \item \textbf{Clean accuracy is not enough} for pattern recognition under nuisance transforms; clean-only Rot90 collapses to $\sim$13\% while robust aug + TTA recovers to $\sim$80--94\%.
+  \item \textbf{Mechanism checks} (PConv identity/FLOPs, $n_{\mathrm{div}}$ ablation, multi-seed mean$\pm$std) make an AI-generated project academically credible.
+  \item \textbf{Literature alternatives} (equivariant CNNs) are useful baselines; for this budget, FasterNet + aug + TTA remained the better primary story.
+  \item \textbf{Domain shift:} EMNIST writer variation and SVHN scene digits expose limits that upright MNIST hides; longer SVHN training (12$\rightarrow$24 epochs) recovered large gains.
+  \item \textbf{Process documentation} (\texttt{process\_log.md}) is required and also helps debugging AI iterations.
+\end{itemize}
+
+\section{Source Code Webpage Link}
+Source code for this assignment (AI-generated implementation, scripts, report sources):\\[0.4em]
+\url{https://github.com/AngusJai/CISC3024-AI-Assignment1}\\[0.3em]
+{\small Repository includes \texttt{models/}, training/evaluation scripts, \texttt{process\_log.md}, and \texttt{report.tex}. Large datasets under \texttt{data/} and local \texttt{.venv/} are excluded via \texttt{.gitignore}; download MNIST/EMNIST/SVHN with the provided scripts.}
+
+\section{Conclusion}
+Using Cursor end-to-end, I searched for a recent Deep CNN (FasterNet), described and verified PConv, had AI implement the full robust-digit pipeline, reported experiments on MNIST/EMNIST/SVHN with ablations, reflected on learning outcomes, and published the source code link above.
+
+\begin{thebibliography}{9}
+\bibitem{chen2023fasternet}
+J.~Chen et al.\ Run, Don't Walk: Chasing Higher FLOPS for Faster Neural Networks.\ CVPR, 2023.
+\bibitem{vasu2023mobileone}
+P.~K.~A.~Vasu et al.\ MobileOne: An Improved One Millisecond Mobile Backbone.\ CVPR, 2023.
+\bibitem{hendrycks2019benchmarking}
+D.~Hendrycks and T.~Dietterich.\ Benchmarking Neural Network Robustness to Common Corruptions and Perturbations.\ ICLR, 2019.
+\bibitem{lecun1998gradient}
+Y.~LeCun et al.\ Gradient-based learning applied to document recognition.\ Proc.\ IEEE, 1998.
+\bibitem{cohen2017emnist}
+G.~Cohen et al.\ EMNIST: an extension of MNIST to handwritten letters.\ 2017.
+\bibitem{netzer2011reading}
+Y.~Netzer et al.\ Reading Digits in Natural Images with Unsupervised Feature Learning.\ NIPS Workshop, 2011.
+\bibitem{rath2023invariances}
+M.~Rath and A.~Condurache.\ Deep Neural Networks with Efficient Guaranteed Invariances.\ AISTATS, 2023.
+\bibitem{rath2022invariant}
+M.~Rath and A.~Condurache.\ Improving the Sample-Complexity of Deep Classification Networks with Invariant Integration.\ arXiv:2202.03967, 2022.
+\end{thebibliography}
+
+\end{document}

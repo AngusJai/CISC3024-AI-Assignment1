@@ -1,0 +1,37 @@
+{
+  "fasternet_relu_ref": {
+    "clean": 0.9894,
+    "rotate_45": 0.9646,
+    "rotate_90": 0.8049,
+    "rotate_90_tta": 0.939,
+    "gaussian_noise": 0.9397
+  },
+  "fasternet_gelu": {
+    "clean": 0.9883,
+    "rotate_45": 0.9726,
+    "rotate_90": 0.8664,
+    "rotate_90_tta": 0.9345,
+    "gaussian_noise": 0.8574
+  },
+  "equivariant_aug": {
+    "clean": 0.964,
+    "rotate_45": 0.9118,
+    "rotate_90": 0.8233,
+    "rotate_90_tta": 0.9269,
+    "gaussian_noise": 0.8307
+  },
+  "svhn_12ep": {
+    "clean": 0.7889,
+    "rotate_45": 0.5757,
+    "rotate_90": 0.5722,
+    "rotate_90_tta": 0.7204,
+    "gaussian_noise": 0.641
+  },
+  "svhn_24ep_long": {
+    "clean": 0.858,
+    "rotate_45": 0.7106,
+    "rotate_90": 0.671,
+    "rotate_90_tta": 0.7924,
+    "gaussian_noise": 0.6929
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "tag": "fasternet_aug_svhn",
+  "params": 271434,
+  "corruption_table": {
+    "clean": {
+      "accuracy": 0.7889,
+      "n": 10000
+    },
+    "rotate_30": {
+      "accuracy": 0.6155,
+      "n": 10000
+    },
+    "rotate_45": {
+      "accuracy": 0.5757,
+      "n": 10000
+    },
+    "rotate_90": {
+      "accuracy": 0.5722,
+      "n": 10000
+    },
+    "rotate_m45": {
+      "accuracy": 0.595,
+      "n": 10000
+    },
+    "gaussian_noise": {
+      "accuracy": 0.641,
+      "n": 10000
+    },
+    "salt_pepper": {
+      "accuracy": 0.7589,
+      "n": 10000
+    },
+    "blur": {
+      "accuracy": 0.7671,
+      "n": 10000
+    },
+    "shift": {
+      "accuracy": 0.6998,
+      "n": 10000
+    },
+    "occlusion": {
+      "accuracy": 0.6714,
+      "n": 10000
+    },
+    "elastic": {
+      "accuracy": 0.5974,
+      "n": 10000
+    },
+    "rotate_90_tta": {
+      "accuracy": 0.7204,
+      "n": 10000
+    },
+    "clean_tta": {
+      "accuracy": 0.7204,
+      "n": 10000
+    }
+  },
+  "reject_curve": [
+    {
+      "threshold": 0.5,
+      "coverage": 0.767799973487854,
+      "accuracy_on_accepted": 0.9040114879608154
+    },
+    {
+      "threshold": 0.6,
+      "coverage": 0.682699978351593,
+      "accuracy_on_accepted": 0.9362823963165283
+    },
+    {
+      "threshold": 0.7,
+      "coverage": 0.6010000109672546,
+      "accuracy_on_accepted": 0.9567387700080872
+    },
+    {
+      "threshold": 0.8,
+      "coverage": 0.5109000205993652,
+      "accuracy_on_accepted": 0.974554717540741
+    },
+    {
+      "threshold": 0.9,
+      "coverage": 0.3856000006198883,
+      "accuracy_on_accepted": 0.9875518679618835
+    },
+    {
+      "threshold": 0.95,
+      "coverage": 0.28679999709129333,
+      "accuracy_on_accepted": 0.9926778078079224
+    }
+  ],
+  "reject_operating_point": {
+    "threshold": 0.7,
+    "coverage": 0.6010000109672546,
+    "accuracy_on_accepted": 0.9567387700080872,
+    "num_rejected": 3990
+  },
+  "confusion_matrix": [
+    [
+      537,
+      17,
+      6,
+      3,
+      12,
+      6,
+      20,
+      14,
+      8,
+      15
+    ],
+    [
+      24,
+      1849,
+      11,
+      8,
+      21,
+      4,
+      3,
+      38,
+      5,
+      1
+    ],
+    [
+      19,
+      53,
+      1321,
+      33,
+      37,
+      8,
+      11,
+      90,
+      12,
+      11
+    ],
+    [
+      19,
+      138,
+      52,
+      719,
+      44,
+      30,
+      11,
+      27,
+      16,
+      48
+    ],
+    [
+      15,
+      91,
+      21,
+      5,
+      794,
+      2,
+      2,
+      32,
+      2,
+      4
+    ],
+    [
+      21,
+      28,
+      17,
+      46,
+      29,
+      680,
+      53,
+      11,
+      21,
+      33
+    ],
+    [
+      48,
+      32,
+      20,
+      20,
+      44,
+      11,
+      505,
+      10,
+      26,
+      26
+    ],
+    [
+      12,
+      89,
+      23,
+      5,
+      14,
+      3,
+      4,
+      650,
+      1,
+      0
+    ],
+    [
+      37,
+      24,
+      15,
+      18,
+      22,
+      12,
+      58,
+      6,
+      407,
+      40
+    ],
+    [
+      70,
+      16,
+      26,
+      10,
+      14,
+      11,
+      13,
+      11,
+      12,
+      427
+    ]
+  ],
+  "mean_confidence_clean": 0.7326259016990662
+}
